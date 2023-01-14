@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://kit.fontawesome.com/a3e7be1751.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css">
+  <title>Student Management Using SPA</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body style="background-image: url('images/background.jpg');" onload="getPageContent('View')">
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#" onclick="getPageContent('View')">Student Management</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" data-toggle="collapse" data-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link text-light" href="#" onclick="getPageContent('View')">View</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="#" onclick="getPageContent('Login')">Operation</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div style="width: 100%; color:white;height: 100%;font-size: 30px;">
+    <p style="margin: 50px;" id="content"></p>
+  </div>
+
+  <script>
+    var pages = {
+      'View':
+        `
+            <h1 style="text-align: center; margin-top: 10px;margin-bottom: 50px;font-style: italic">STUDENT LIST</h1>
+            <div class="input-group mb-4">
+              <div class="input-group-prepend"><i class="fa-solid fa-magnifying-glass input-group-text"></i></div>
+              <input class="form-control" id="view-search" type="text" placeholder="Search..">
+            </div>
+
+            <table class="table table-hover" style="font-size: 20px;text-align:center;">
+              <thead>
+                <tr>
+                  <th>Student ID</th>
+                  <th>Fullname</th>
+                  <th>Email</th>
+                  <th>Faculty</th>
+                  <th>Date Of Birth</th>
+                  <th>Phone Number</th>
+                </tr>
+              </thead>
+              
+              <tbody id="view-tbody">
+                
+              </tbody>
+            </table>
+          `,
+
+      'Login':
+        `
+          <h1>Administrator Login</h1>
+    <div class="container-fluid">  
+        <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-12 mx-auto p-4 border rounded">
+                <img src="images/login.gif">
+
+                    <div class="form-group">
+                        <p id="check-un" class="mt-3 btn btn-danger p-1 mt-1"></p>
+                        <label for="username">Username</label>
+                        <div class="input-group w-50">
+                            <div class="input-group-prepend"><i class="input-group-text fa-solid fa-circle-user"></i></div>
+                            <input class="form-control" id="username" type="text" placeholder="Username">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p id="check-pw" class="mt-3 btn btn-danger p-1 mt-1"></p>
+                        <label for="pass">Password</label>
+                        <div class="input-group w-50">
+                            <div class="input-group-prepend"><i class="input-group-text fa-solid fa-lock"></i></div>
+                            <input class="form-control" id="pass" type="password" placeholder="Password">
+                        </div>
+                    </div>
+
+                    <div id="buttons">
+                        <button id="submit" class="btn btn-primary px-2 mr-2" onclick="login()"><i class="fa-solid fa-arrow-right-to-arc"></i> Login</button>
+                        <button id="reset" class="btn btn-danger px-2" onclick="reset()"><i class="fa-solid fa-arrow-rotate-left"></i> Reset</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+          `,
+
+      'Operation':
+        `
+          <button onclick="getPageContent('Add')" onmouseleave="leaveButton('add')" onmouseover="hoverButton('add')" class="btn btn-primary mb-2" id="add-btn"><i class="fa-solid fa-plus-large"></i></button>
+          <br>
+          <button onclick="getPageContent('Update')" onmouseleave="leaveButton('update')" onmouseover="hoverButton('update')" class="btn btn-warning mb-2" id="update-btn"><i class="fa-solid fa-user-pen"></i></button>
+          
+          <div class="modal" id="deleteComfimation" style="color: black">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Delete Confirmation</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+        
+              <div class="modal-body">
+                Do you want to delete <strong></strong> ?
+              </div>
+        
+              <div class="modal-footer">
+                <button id="confirm" type="button" class="btn btn-danger" data-dismiss="modal">Yes</button>
+              </div>
+        
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group mb-4">
+              <div class="input-group-prepend"><i style="background-color: white" class="fa-solid fa-magnifying-glass input-group-text"></i></div>
+              <input class="form-control" id="operation-search" type="text" placeholder="Search..">
+            </div>
+          <table class="table table-hover" style="font-size: 20px;text-align:center;">
+            <thead>
+              <tr class="header" style="font-weight:bold">
+                <th>Student ID</th>
+                <th>Fullname</th>
+                <th>Email</th>
+                <th>Faculty</th>
+                <th>Date of birth</th>
+                <th>Phone number</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            
+            <tbody id="operation-tbody">
+
+            </tbody>
+          </table>
+        `,
+
+      'Add':
+      `
+      <h1>Add A Student</h1>
+    <div class="container-fluid">  
+        <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-12 mx-auto p-4 border rounded">
+                <img src="/images/add.gif" style="margin-top: 10%;height: 600px;">
+
+                    <div class="form-group">
+                        <p style="position: absolute;" id="check-id" class="btn btn-danger p-1 mt-1"><i class="fa-light fa-shield-exclamation"></i> Student ID is required</p>
+                        <label for="id">Student ID</label>
+                        <div class="input-group w-50">
+                            <div class="input-group-prepend"><i class="input-group-text fa-solid fa-id-card"></i></div>
+                            <input class="form-control" id="id" type="text" placeholder="Student ID">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p style="position: absolute;" id="check-fn" class="btn btn-danger p-1 mt-1"><i class="fa-light fa-shield-exclamation"></i> Fullname is required</p>
+                        <label for="fn">Fullname</label>
+                        <div class="input-group w-50">
+                            <div class="input-group-prepend"><i class="input-group-text fa-solid fa-circle-user"></i></div>
+                            <input class="form-control" id="fn" type="text" placeholder="Fullname">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p style="position: absolute;" id="check-em" class="btn btn-danger p-1 mt-1"></p>
+                        <label for="em">Email</label>
+                        <div class="input-group w-50">
+                            <div class="input-group-prepend"><i class="input-group-text fa-solid fa-envelope"></i></div>
+                            <input class="form-control" id="em" type="email" placeholder="Email">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p style="position: absolute;" id="check-fal" class="btn btn-danger p-1 mt-1"><i class="fa-light fa-shield-exclamation"></i> Faculty is required</p>
+                        <label for="fal">Faculty</label>
+                        <div class="input-group w-50">
+                            <div class="input-group-prepend"><i class="input-group-text fa-solid fa-school"></i></i></div>
+                            <input class="form-control" id="fal" type="text" placeholder="Faculty">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p style="position: absolute;" id="check-dob" class="btn btn-danger p-1 mt-1"></p>
+                        <label for="dob">Date of birth</label>
+                        <div class="input-group w-50">
+                            <div class="input-group-prepend"><i class="input-group-text fa-solid fa-cake-candles"></i></div>
+                            <input class="form-control" id="dob" type="text" placeholder="Date of birth">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p style="position: absolute;" id="check-phone" class="btn btn-danger p-1 mt-1"><i class="fa-light fa-shield-exclamation"></i>Phone number must have 10 numbers</p>
+                        <label for="phone">Phone number</label>
+                        <div class="input-group w-50">
+                            <div class="input-group-prepend"><i class="input-group-text fa-solid fa-phone"></i></div>
+                            <input class="form-control" id="phone" type="text" placeholder="Phone number">
+                        </div>
+                    </div>
+
+                    <div id="last">
+                        <button onclick="addStudent()" id="add" class="btn btn-primary px-2 mr-2"><i class="fa-solid fa-arrow-right-to-arc"></i> Add</button>
+                        <button onclick="getPageContent('Operation')" id="exit" class="btn btn-danger px-2"><i class="fa-solid fa-arrow-rotate-left"></i> Exit</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+      `,
+      'Update':
+      `
+      <h1>Update A Student</h1>
+    <div class="container-fluid">  
+        <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-12 mx-auto p-4 border rounded">
+                <img src="/images/update.gif" style="margin-top: 10%;height: 700px;">
+                    <div class="form-group">
+                        <p style="position: absolute;" id="check-old-id" class="btn btn-danger p-1 mt-1"><i class="fa-light fa-shield-exclamation"></i> You need to enter this box</p>
+                        <label for="old-id">Student ID need to be updated</label>
+                        <div class="input-group w-50">
+                            <div class="input-group-prepend"><i class="input-group-text fa-solid fa-id-card"></i></div>
+                            <input class="form-control" id="old-id" type="text" placeholder="Who ?">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p style="position: absolute;" id="check-id" class="btn btn-danger p-1 mt-1"><i class="fa-light fa-shield-exclamation"></i> Student ID is required</p>
+                        <label for="id">Student ID</label>
+                        <div class="input-group w-50">
+                            <div class="input-group-prepend"><i class="input-group-text fa-solid fa-id-card"></i></div>
+                            <input class="form-control" id="id" type="text" placeholder="Student ID">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p style="position: absolute;" id="check-fn" class="btn btn-danger p-1 mt-1"><i class="fa-light fa-shield-exclamation"></i> Fullname is required</p>
+                        <label for="fn">Fullname</label>
+                        <div class="input-group w-50">
+                            <div class="input-group-prepend"><i class="input-group-text fa-solid fa-circle-user"></i></div>
+                            <input class="form-control" id="fn" type="text" placeholder="Fullname">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p style="position: absolute;" id="check-em" class="btn btn-danger p-1 mt-1"></p>
+                        <label for="em">Email</label>
+                        <div class="input-group w-50">
+                            <div class="input-group-prepend"><i class="input-group-text fa-solid fa-envelope"></i></div>
+                            <input class="form-control" id="em" type="email" placeholder="Email">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p style="position: absolute;" id="check-fal" class="btn btn-danger p-1 mt-1"><i class="fa-light fa-shield-exclamation"></i> Faculty is required</p>
+                        <label for="fal">Faculty</label>
+                        <div class="input-group w-50">
+                            <div class="input-group-prepend"><i class="input-group-text fa-solid fa-school"></i></i></div>
+                            <input class="form-control" id="fal" type="text" placeholder="Faculty">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p style="position: absolute;" id="check-dob" class="btn btn-danger p-1 mt-1"></p>
+                        <label for="dob">Date of birth</label>
+                        <div class="input-group w-50">
+                            <div class="input-group-prepend"><i class="input-group-text fa-solid fa-cake-candles"></i></div>
+                            <input class="form-control" id="dob" type="text" placeholder="Date of birth">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p style="position: absolute;" id="check-phone" class="btn btn-danger p-1 mt-1"><i class="fa-light fa-shield-exclamation"></i>Phone number must have 10 numbers</p>
+                        <label for="phone">Phone number</label>
+                        <div class="input-group w-50">
+                            <div class="input-group-prepend"><i class="input-group-text fa-solid fa-phone"></i></div>
+                            <input class="form-control" id="phone" type="text" placeholder="Phone number">
+                        </div>
+                    </div>
+
+                    <div id="last">
+                        <button onclick="updateStudent()" id="add" class="btn btn-primary px-2 mr-2"><i class="fa-solid fa-arrow-right-to-arc"></i> Update</button>
+                        <button onclick="getPageContent('Operation')" id="exit" class="btn btn-danger px-2"><i class="fa-solid fa-arrow-rotate-left"></i> Exit</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+      `
+    };
+
+    function getPageContent(page) {
+      var contentToReturn;
+
+      switch (page) {
+        case 'View':
+          contentToReturn = pages.View;
+
+          $(document).ready(function () {
+            $("#view-search").on("keyup", function () {
+              var value = $(this).val().toLowerCase();
+              $("#view-tbody tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+              });
+
+            });
+          });
+
+          fetch('http://localhost/api/get_students.php')
+          .then(response => response.json())
+          .then(displayViewTable)
+
+          break;
+
+        case 'Login':
+          contentToReturn = pages.Login
+          break;
+
+        case 'Operation':
+          contentToReturn = pages.Operation;
+          
+          $(document).ready(function () {
+            $("#operation-search").on("keyup", function () {
+              var value = $(this).val().toLowerCase();
+              $("#operation-tbody tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+              });
+
+            });
+          });
+
+          fetch('http://localhost/api/get_students.php')
+          .then(response => response.json())
+          .then(displayOperationTable)
+
+          break;
+        
+        case 'Add':
+          contentToReturn = pages.Add
+          break;
+        
+        case 'Update':
+          contentToReturn = pages.Update
+          break;
+
+        default:
+          contentToReturn = pages.View;
+          break;
+      }
+      document.getElementById('content').innerHTML = contentToReturn;
+    }
+
+    function hoverButton(type) {
+      if(type === 'add') {
+        let add = document.getElementById('add-btn')
+        add.innerHTML = 'Add a new student'
+        add.style.width = '250px'
+        add.style.transition = '0.25s'
+      }
+      else {
+        let update = document.getElementById('update-btn')
+        update.innerHTML = 'Update a student'
+        update.style.width = '250px'
+        update.style.transition = '0.25s'
+      }
+    }
+
+    function leaveButton(type) {
+      if(type === 'add') {
+        let add = document.getElementById('add-btn')
+        add.style.width = '50px'
+        add.innerHTML = '<i class="fa-solid fa-plus-large"></i>'
+        add.style.transition = '0.25s'
+      }
+      else {
+        let update = document.getElementById('update-btn')
+        update.style.width = '50px'
+        update.innerHTML = '<i class="fa-solid fa-user-pen"></i>'
+        update.style.transition = '0.25s'
+      }
+    }
+
+  </script>
+
+  <script src="js/login.js"></script>
+  <script src="js/get.js"></script>
+  <script src="js/add.js"></script>
+  <script src="js/update.js"></script>
+  <script src="js/delete.js"></script>
+</body>
+
+</html>

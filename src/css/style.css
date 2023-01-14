@@ -1,0 +1,52 @@
+h1 {
+  text-align: center;
+  color: white;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.col-lg-8 {
+  background-color: white;
+}
+
+img {
+  float: left;
+  width: 40%;
+  margin-right: 10%;
+  margin-bottom: 10%;
+}
+
+.input-group-text {
+  font-size: 30px;
+  background-color: white;
+}
+
+td,
+th {
+  color: white;
+  font-weight: bold;
+}
+
+th {
+  font-style: italic;
+  text-decoration: underline;
+}
+
+#check-un, #check-pw, #check-id, #check-fn, #check-em, #check-fal, #check-dob, #check-phone, #check-old-id {
+  position: absolute;
+  display: none;
+  left: 50%;
+}
+
+label {
+  color: black;
+  font-size: 21px;
+}
+
+#add-btn, #update-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 35px;
+  font-size: 20px;
+  text-align: center;
+}
