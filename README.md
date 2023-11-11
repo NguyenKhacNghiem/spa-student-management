@@ -1,15 +1,23 @@
-# Student Management Php
-A student management system using php.
+# Student Management Website
+The website is my pet project about a simple student management website that I did when I learned Single Page Application (SPA).
+### Software Development Technologies
+- HTML, CSS: make website frontend.
+- Javascript: make Single Page Application (SPA).
+- PHP: make website backend.
+- MySQL: make the database.
+- Bootstrap 4: make intuitive and friendly UI
 ### Features
-1. CRUD
-2. Searching
-3. Sign in
-4. Sign out
-5. **Having Single-page application (SPA)**
-### How to run this program?
-1. Import file `studentmanagement.sql` into **PHPMyAdmin**
-2. Copy all data (files and folders) in **source** folder into **htdocs** folder of **xampp**
-3. Open browser, access localhost from the address bar
+1. Sign in
+2. CRUD
+3. Searching
+### How to run this program
+1. Download or clone this project from GitHub.
+2. Unzip this project.
+3. Open XAMPP and access PHPMyAdmin.
+4. Import file `studentmanagement.sql` in order to have a sample database.
+5. Copy all content in `src` folder and paste it to `htdocs` folder of XAMPP.
+6. Open file `db.php` to reconfig the database like hostname, username, password (if any).
+7. Open the browser and accessing `http://localhost/`.
 ### Administrator account to sign in
 - username: admin
 - password: 123456
